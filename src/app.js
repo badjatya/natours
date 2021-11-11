@@ -37,7 +37,27 @@ app.post("/api/v1/tours", (req,res) => {
     } catch (error) {
         res.send(error)
     }
-})
+});
+
+app.get("/api/v1/tours/:id", (req,res) => {
+
+    const tour = tours.find(tour => tour.id === parseInt(req.params.id));
+
+    if(!tour) {
+        return res.status(404).json({
+            status: "fail",
+            message: "Invalid id"
+        })
+    }
+
+    res.status(200).json({
+        status: "success",
+        data: {
+            tour
+        }
+    })
+});
+
 
 app.listen(5000, () => {
     console.log(`Listening at http://localhost:${5000}`);

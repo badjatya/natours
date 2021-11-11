@@ -1,0 +1,27 @@
+{
+  "name": "natours",
+  "version": "1.0.0",
+  "description": "A express nodejs backend application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badjatya/natours.git"
+  },
+  "keywords": [
+    "express",
+    "node"
+  ],
+  "author": "Archit Badjatya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/badjatya/natours/issues"
+  },
+  "homepage": "https://github.com/badjatya/natours#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

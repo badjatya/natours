@@ -1,13 +1,18 @@
 const express = require("express");
+const fs = require("fs")
 const app = express();
 
-app.get("/", (req,res) => {
-    res.json({message: "Hello from backend", request: "Natours"})
-});
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
-app.post("/", (req,res) => {
-    res.send("Hello post")
-});
+app.get("/api/v1/tours", (req,res) => {
+    res.status(200).json({
+        status: "success",
+        results: tours.length,
+        data: {
+            tours
+        }
+    })
+})
 
 app.listen(5000, () => {
     console.log(`Listening at http://localhost:${5000}`);

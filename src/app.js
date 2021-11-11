@@ -8,7 +8,16 @@ app.use(express.json())
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
-app.get("/api/v1/tours", (req,res) => {
+// Routes
+app.route("/api/v1/tours").get(getTours).post(createTour)
+app.route("/api/v1/tours/:id").get(getTour).patch(updateTour).delete(deleteTour)
+
+app.listen(5000, () => {
+    console.log(`Listening at http://localhost:${5000}`);
+});
+
+// Controllers
+function getTours (req,res) {
     res.status(200).json({
         status: "success",
         results: tours.length,
@@ -16,9 +25,9 @@ app.get("/api/v1/tours", (req,res) => {
             tours
         }
     })
-});
+}
 
-app.post("/api/v1/tours", (req,res) => {
+function createTour (req,res) {
     try {
         const newTour = {
             id: tours.length + 1,
@@ -37,9 +46,9 @@ app.post("/api/v1/tours", (req,res) => {
     } catch (error) {
         res.send(error)
     }
-});
+}
 
-app.get("/api/v1/tours/:id", (req,res) => {
+function getTour (req,res) {
 
     const tour = tours.find(tour => tour.id === parseInt(req.params.id));
 
@@ -56,9 +65,9 @@ app.get("/api/v1/tours/:id", (req,res) => {
             tour
         }
     })
-});
+}
 
-app.patch("/api/v1/tours/:id", (req,res) => {
+function updateTour (req,res) {
 
     const tour = tours.find(tour => tour.id === parseInt(req.params.id));
 
@@ -75,8 +84,22 @@ app.patch("/api/v1/tours/:id", (req,res) => {
             tour: "<Updated tour here...>"
         }
     })
-});
+}
 
-app.listen(5000, () => {
-    console.log(`Listening at http://localhost:${5000}`);
-})
+function deleteTour (req,res) {
+
+    const tour = tours.find(tour => tour.id === parseInt(req.params.id));
+
+    if(!tour) {
+        return res.status(404).json({
+            status: "fail",
+            message: "Invalid id"
+        })
+    }
+
+    res.status(204).json({
+        status: "success",
+        data: null
+    })
+}
+

@@ -1,9 +1,10 @@
 const express = require("express");
 const fs = require("fs");
-const { stringify } = require("querystring");
+const morgan = require("morgan");
 const app = express();
 
 // express middlewares
+app.use(morgan("dev"))
 app.use(express.json())
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));

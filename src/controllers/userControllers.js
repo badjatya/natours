@@ -2,37 +2,37 @@ const fs = require("fs");
 const path = require("path");
 
 // Tours
-const tours = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "../dev-data/data/tours-simple.json"))
+const users = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "../dev-data/data/users.json"))
 );
 
-function getTours(req, res) {
+function getUsers(req, res) {
   res.status(200).json({
     status: "success",
-    results: tours.length,
+    results: users.length,
     data: {
-      tours,
+      users,
     },
   });
 }
 
-function createTour(req, res) {
+function createUser(req, res) {
   try {
-    const newTour = {
-      id: tours.length + 1,
+    const newUser = {
+      id: users.length + 1,
       ...req.body,
     };
 
-    tours.push(newTour);
+    users.push(newUser);
     fs.writeFileSync(
-      `${__dirname}/dev-data/data/tours-simple.json`,
-      JSON.stringify(tours)
+      path.join(__dirname, "../dev-data/data/users.json"),
+      JSON.stringify(users)
     );
 
     res.status(201).json({
       status: "success",
       data: {
-        tour: newTour,
+        users: newUser,
       },
     });
   } catch (error) {
@@ -40,10 +40,10 @@ function createTour(req, res) {
   }
 }
 
-function getTour(req, res) {
-  const tour = tours.find((tour) => tour.id === parseInt(req.params.id));
+function getUser(req, res) {
+  const user = users.find((user) => user.id === parseInt(req.params.id));
 
-  if (!tour) {
+  if (!user) {
     return res.status(404).json({
       status: "fail",
       message: "Invalid id",
@@ -53,15 +53,15 @@ function getTour(req, res) {
   res.status(200).json({
     status: "success",
     data: {
-      tour,
+      user,
     },
   });
 }
 
-function updateTour(req, res) {
-  const tour = tours.find((tour) => tour.id === parseInt(req.params.id));
+function updateUser(req, res) {
+  const user = users.find((user) => user.id === parseInt(req.params.id));
 
-  if (!tour) {
+  if (!user) {
     return res.status(404).json({
       status: "fail",
       message: "Invalid id",
@@ -71,15 +71,15 @@ function updateTour(req, res) {
   res.status(200).json({
     status: "success",
     data: {
-      tour: "<Updated tour here...>",
+      tour: "<Updated user here...>",
     },
   });
 }
 
-function deleteTour(req, res) {
-  const tour = tours.find((tour) => tour.id === parseInt(req.params.id));
+function deleteUser(req, res) {
+  const user = users.find((user) => user.id === parseInt(req.params.id));
 
-  if (!tour) {
+  if (!user) {
     return res.status(404).json({
       status: "fail",
       message: "Invalid id",
@@ -93,9 +93,9 @@ function deleteTour(req, res) {
 }
 
 module.exports = {
-  getTours,
-  getTour,
-  createTour,
-  updateTour,
-  deleteTour,
+  getUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
 };

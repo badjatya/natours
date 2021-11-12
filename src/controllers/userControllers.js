@@ -6,6 +6,18 @@ const users = JSON.parse(
   fs.readFileSync(path.join(__dirname, "../dev-data/data/users.json"))
 );
 
+// Middlewares
+const checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: "fail",
+      message: "missing name or price",
+    });
+  }
+
+  next();
+};
+
 function getUsers(req, res) {
   res.status(200).json({
     status: "success",
@@ -98,4 +110,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  checkBody,
 };

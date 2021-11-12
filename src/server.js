@@ -1,5 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
+
+// db
+require("./db/mongoose");
+
 const app = express();
 
 // express middlewares

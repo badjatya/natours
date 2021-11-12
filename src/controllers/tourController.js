@@ -11,14 +11,27 @@ function getTours(req, res) {
   });
 }
 
-function createTour(req, res) {
-  res.status(201).json({
-    status: "success",
-    // data: {
-    //   tour: newTour,
-    // },
-  });
-}
+const createTour = async (req, res) => {
+  try {
+    const newTour = new Tour(req.body);
+    await newTour.save();
+
+    res.status(201).json({
+      status: "success",
+      data: {
+        tour: newTour,
+      },
+    });
+
+    console.log(newTour);
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: "Invalid data",
+      error: error,
+    });
+  }
+};
 
 function getTour(req, res) {
   res.status(200).json({

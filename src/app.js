@@ -3,6 +3,9 @@ const fs = require("fs");
 const morgan = require("morgan");
 const app = express();
 
+// Static
+app.use(express.static(`${__dirname}/public`));
+
 // express middlewares
 app.use(morgan("dev"));
 app.use(express.json());

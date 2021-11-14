@@ -1,6 +1,15 @@
 // Models
 const Tour = require("../models/tour");
 
+// Alias route for top 5 best tour
+const aliasTopTours = (req, res, next) => {
+  req.query.limit = "5";
+  req.query.sort = "-ratingsAverage,price";
+  req.query.fields = "name,price,ratingsAverage,summary,description";
+
+  next();
+};
+
 const getTours = async (req, res) => {
   try {
     // 1A) FILTERING
@@ -144,4 +153,5 @@ module.exports = {
   createTour,
   updateTour,
   deleteTour,
+  aliasTopTours,
 };

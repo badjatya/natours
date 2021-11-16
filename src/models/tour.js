@@ -11,6 +11,14 @@ const tourSchema = mongoose.Schema(
       required: [true, "A tour must have a name"],
       unique: true,
       trim: true,
+      maxlength: [
+        50,
+        "A tour name must have or less or equal than 40 characters",
+      ],
+      minlength: [
+        10,
+        "A tour name must have or more or equal than 10 characters",
+      ],
     },
     slug: String,
     duration: {
@@ -24,10 +32,16 @@ const tourSchema = mongoose.Schema(
     difficulty: {
       type: String,
       required: [true, "A tour must have a difficulty"],
+      enum: {
+        values: ["easy", "medium", "difficult"],
+        message: "Difficulty is either: easy, medium or difficult",
+      },
     },
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      min: [1, "Rating must be above 1.0"],
+      max: [5, "Rating must be below 5.0"],
     },
     ratingsQuantity: {
       type: Number,
@@ -37,7 +51,15 @@ const tourSchema = mongoose.Schema(
       type: Number,
       required: [true, "A tour must have a price"],
     },
-    priceDiscount: Number,
+    priceDiscount: {
+      type: Number,
+      validate: {
+        validator: function (value) {
+          return val < this.price;
+        },
+        message: "Discount price should be below regular price",
+      },
+    },
     summary: {
       type: String,
       trim: true,
@@ -57,6 +79,10 @@ const tourSchema = mongoose.Schema(
       default: Date.now(),
     },
     startDates: [Date],
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -72,6 +98,18 @@ tourSchema.virtual("durationWeeks").get(function () {
 // Pre
 tourSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+// Query middleware
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
+  next();
+});
+
+// Aggregation middleware
+tourSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
   next();
 });
 

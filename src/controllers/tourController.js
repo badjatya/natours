@@ -185,7 +185,7 @@ const getMonthlyPlan = async (req, res) => {
         $sort: { numTourStarts: -1 },
       },
       {
-        $limit: 6,
+        $limit: 12,
       },
     ]);
 

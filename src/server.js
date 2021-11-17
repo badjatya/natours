@@ -17,4 +17,11 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/v1/tours", require("./routes/tourRoutes"));
 app.use("/api/v1/users", require("./routes/userRoutes"));
 
+app.all("*", (req, res) => {
+  res.status(404).json({
+    status: "fail",
+    message: `The page ${req.originalUrl} is not found in the server`,
+  });
+});
+
 module.exports = app;

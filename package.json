@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/app",
     "dev": "nodemon src/app",
+    "start:prod": "NODE_ENV=production nodemon src/app",
     "debug": "ndb src/app"
   },
   "repository": {
